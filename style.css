@@ -1,0 +1,108 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f0f2f5;
+    color: #333;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+}
+
+h1 {
+    color: #4CAF50;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+}
+
+.choices {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+}
+
+.choice-btn {
+    background-color: #607D8B;
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    font-size: 1.2em;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: 100px;
+}
+
+.choice-btn:hover {
+    background-color: #455A64;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.choice-btn:active {
+    background-color: #37474F;
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.result-area, .score-area {
+    background-color: #e8f5e9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+    border: 1px solid #c8e6c9;
+}
+
+.result-area p, .score-area p {
+    margin: 8px 0;
+    font-size: 1.1em;
+}
+
+.result-area span, .score-area span {
+    font-weight: bold;
+    color: #2e7d32;
+}
+
+#result-message {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #1b5e20;
+    margin-top: 15px;
+}
+
+.reset-btn {
+    background-color: #F44336;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1em;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.reset-btn:hover {
+    background-color: #D32F2F;
+}
+
+/* 响应式设计 */
+@media (max-width: 600px) {
+    .choices {
+        flex-direction: column;
+    }
+    .choice-btn {
+        margin-bottom: 10px;
+    }
+}
