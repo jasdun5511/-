@@ -18,14 +18,15 @@ body {
 
 
 .container {
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.9); /* 将不透明度从 100% 降低到 90% (0.9) */
     padding: 40px 30px;
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* 增加阴影，使其更突出 */
     text-align: center;
     max-width: 500px;
     width: 90%;
 }
+
 
 h1 {
     color: #4CAF50;
