@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (winner === 'player') {
             playerScore++;
-            resultMessage.textContent = '🎉 你真他妈牛逼！';
+            resultMessage.textContent = '🎉 你赢了你真他妈牛逼！';
             resultMessage.style.color = '#2e7d32';
         } else if (winner === 'computer') {
             computerScore++;
