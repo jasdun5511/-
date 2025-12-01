@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resultMessage.style.color = '#2e7d32';
         } else if (winner === 'computer') {
             computerScore++;
-            resultMessage.textContent = '😢 你菜就多练！';
+            resultMessage.textContent = '😢 菜就多练！';
             resultMessage.style.color = '#d32f2f';
         } else {
             resultMessage.textContent = '🤝 平局 ！';
