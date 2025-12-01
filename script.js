@@ -49,14 +49,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (winner === 'player') {
             playerScore++;
-            resultMessage.textContent = '🎉 你赢了！';
+            resultMessage.textContent = '🎉 你真他妈牛逼！';
             resultMessage.style.color = '#2e7d32';
         } else if (winner === 'computer') {
             computerScore++;
-            resultMessage.textContent = '😢 你输了！';
+            resultMessage.textContent = '😢 你菜就多练！';
             resultMessage.style.color = '#d32f2f';
         } else {
-            resultMessage.textContent = '🤝 平局！';
+            resultMessage.textContent = '🤝 平局 ！';
             resultMessage.style.color = '#fbc02d';
         }
 
