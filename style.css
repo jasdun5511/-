@@ -5,9 +5,17 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    background-color: #f0f2f5;
+    /* --- 这里是添加背景图片的设置 --- */
+    background-image: url('laoba.png'); /* 替换为您的图片文件名 */
+    background-size: cover;          /* 确保图片覆盖整个背景 */
+    background-position: center;     /* 将图片中心对齐 */
+    background-attachment: fixed;    /* 保持背景图片不动，当内容滚动时 */
+    /* --- 背景图片设置结束 --- */
+    
+    background-color: #f0f2f5; /* 作为一个备用的颜色，如果图片加载失败 */
     color: #333;
 }
+
 
 .container {
     background-color: #ffffff;
