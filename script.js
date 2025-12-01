@@ -15,8 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function getChoiceDisplay(choice) {
         switch (choice) {
             case 'rock': return '🪨 石头';
-            case 'paper': return '✂️ 剪刀';
-            case 'scissors': return '📄 布';
+            case 'paper': return '📄 布';
+            case 'scissors': return '✂️ 剪刀';
             default: return '?';
         }
     }
