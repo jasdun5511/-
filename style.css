@@ -6,7 +6,7 @@ body {
     min-height: 100vh;
     margin: 0;
     /* --- 这里是添加背景图片的设置 --- */
-    background-image: url('laoba.png'); /* 替换为您的图片文件名 */
+    background-image: url('https://picsum.photos/1920/1080'); 
     background-size: cover;          /* 确保图片覆盖整个背景 */
     background-position: center;     /* 将图片中心对齐 */
     background-attachment: fixed;    /* 保持背景图片不动，当内容滚动时 */
