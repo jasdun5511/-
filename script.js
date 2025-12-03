@@ -14,9 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 根据选择的英文名返回中文名和表情符号
     function getChoiceDisplay(choice) {
         switch (choice) {
-            case 'rock': return '🪨 石头';
-            case 'paper': return '📄 布';
-            case 'scissors': return '✂️ 剪刀';
+            case 'rock': return '🪨 究极无敌的石头';
+            case 'paper': return '📄 绝对领域的布';
+            case 'scissors': return '✂️ 极速凌驾的剪刀';
             default: return '?';
         }
     }
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (winner === 'player') {
             playerScore++;
-            resultMessage.textContent = '🎉 你赢了你真他妈牛逼！';
+            resultMessage.textContent = '🎉 你赢了你真他🐴牛逼！';
             resultMessage.style.color = '#2e7d32';
         } else if (winner === 'computer') {
             computerScore++;
