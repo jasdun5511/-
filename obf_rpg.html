@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OBF 物理大师系统 - Nível III</title>
+    <style>
+        :root {
+            --primary: #4ecca3;
+            --bg-dark: #232931;
+            --panel-bg: #393e46;
+            --danger: #ff2e63;
+            --text: #eeeeee;
+        }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            width: 90%;
+            max-width: 1000px;
+        }
+        .panel {
+            background: var(--panel-bg);
+            padding: 20px;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(78, 204, 163, 0.3);
+        }
+        h2, h3 { margin-top: 0; border-bottom: 1px solid var(--primary); padding-bottom: 10px; }
+        
+        /* 进度条样式 */
+        .bar-container { width: 100%; background: #222; border-radius: 5px; margin: 10px 0; border: 1px solid #555; }
+        .xp-bar { height: 15px; width: 0%; background: var(--primary); border-radius: 5px; transition: 0.3s; }
+        .hp-bar { height: 15px; width: 100%; background: var(--danger); border-radius: 5px; transition: 0.3s; }
+        
+        /* 按钮与任务 */
+        .btn {
+            background: transparent; border: 1px solid var(--primary); color: var(--primary);
+            padding: 10px 15px; margin: 5px; cursor: pointer; border-radius: 5px;
+            font-family: inherit; font-weight: bold; transition: 0.2s;
+        }
+        .btn:hover { background: var(--primary); color: var(--bg-dark); }
+        .btn:disabled { border-color: #555; color: #555; cursor: not-allowed; background: transparent; }
+        
+        .quest {
+            background: #2a2f35; padding: 15px; margin-bottom: 10px; border-left: 4px solid var(--primary);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        /* 技能树 */
+        .skill-tree { display: flex; gap: 10px; margin-top: 15px; }
+        .skill {
+            padding: 10px; border: 1px dashed #777; color: #777; border-radius: 5px; text-align: center; flex: 1;
+        }
+        .skill.unlocked { border: 1px solid var(--primary); color: var(--primary); font-weight: bold; background: rgba(78,204,163,0.1); }
+
+        /* Boss 战模态框 */
+        #boss-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); justify-content: center; align-items: center;
+        }
+        .boss-arena {
+            background: var(--bg-dark); width: 600px; padding: 30px; border: 3px solid var(--danger);
+            border-radius: 10px; text-align: center; box-shadow: 0 0 30px rgba(255, 46, 99, 0.5);
+        }
+        .question-box { background: var(--panel-bg); padding: 15px; margin: 20px 0; border-radius: 5px; text-align: left; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+    </style>
+</head>
+<body>
+
+<h1>⚔️ OBF 备考终端 v1.0</h1>
+
+<div class="container">
+    <div class="panel">
+        <h2>🧑‍🎓 状态面板 (Status)</h2>
+        <p><strong>等级:</strong> Lv. <span id="level">1</span> (初级物理学徒)</p>
+        <p><strong>HP (精力):</strong> <span id="hp-text">100</span> / 100</p>
+        <div class="bar-container"><div class="hp-bar" id="hp-bar"></div></div>
+        
+        <p><strong>XP (经验):</strong> <span id="xp-text">0</span> / 1000</p>
+        <div class="bar-container"><div class="xp-bar" id="xp-bar"></div></div>
+
+        <h3>🌌 技能树 (Skill Tree)</h3>
+        <div class="skill-tree">
+            <div class="skill unlocked" id="skill-mechanics">运动学<br>(已解锁)</div>
+            <div class="skill" id="skill-thermo">热力学<br>(Lv.3 解锁)</div>
+            <div class="skill" id="skill-electro">电动力学<br>(Lv.5 解锁)</div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h2>📜 任务大厅 (Quests)</h2>
+        <div class="quest">
+            <div>
+                <strong>[日常] 基础公式推导</strong><br>
+                <small>复习匀加速直线运动公式。</small>
+            </div>
+            <button class="btn" onclick="gainXP(200)">完成 (+200 XP)</button>
+        </div>
+        <div class="quest">
+            <div>
+                <strong>[挑战] OBF 初赛力学题</strong><br>
+                <small>完成 5 道 Nível III 选择题。</small>
+            </div>
+            <button class="btn" onclick="gainXP(400)">完成 (+400 XP)</button>
+        </div>
+
+        <h2 style="margin-top: 30px; border-bottom-color: var(--danger);">🚪 副本挑战 (Dungeons)</h2>
+        <p>挑战 Boss 验证你的物理直觉！失败将扣除 HP。</p>
+        <button class="btn" style="border-color: var(--danger); color: var(--danger); width: 100%;" onclick="startBossFight()">
+            ⚠️ 挑战 BOSS: 牛顿第二定律守卫者
+        </button>
+    </div>
+</div>
+
+<div id="boss-modal">
+    <div class="boss-arena">
+        <h2 style="color: var(--danger); border-bottom: none;">👾 BOSS: 牛顿守卫者</h2>
+        <p>BOSS HP: <span id="boss-hp-text">100</span> / 100</p>
+        <div class="bar-container"><div class="hp-bar" id="boss-hp-bar" style="background: var(--danger);"></div></div>
+        
+        <div class="question-box" id="question-box">
+            </div>
+        
+        <div class="options" id="options-box">
+            </div>
+        <button class="btn" style="margin-top: 20px;" onclick="fleeBattle()">逃跑 (返回大厅)</button>
+    </div>
+</div>
+
+<script>
+    // --- 游戏核心数据 ---
+    let player = { level: 1, xp: 0, xpNeeded: 1000, hp: 100, maxHp: 100 };
+    let boss = { hp: 100, maxHp: 100 };
+    
+    // OBF 题库 (你可以用 Deep Research 找真题填进来)
+    const questions = [
+        {
+            q: "一个质量为 2kg 的物体在光滑水平面上受到 10N 的恒力作用，从静止开始运动。3秒后物体的速度是多少？",
+            options: ["10 m/s", "15 m/s", "20 m/s", "30 m/s"],
+            correctIndex: 1, // 15 m/s (a = F/m = 5, v = at = 15)
+            damageToBoss: 50,
+            damageToPlayer: 20
+        },
+        {
+            q: "以下哪个公式代表了做功-动能定理？",
+            options: ["W = ΔK", "F = ma", "E = mc²", "p = mv"],
+            correctIndex: 0,
+            damageToBoss: 50,
+            damageToPlayer: 20
+        }
+    ];
+    let currentQuestionIndex = 0;
+
+    // --- UI 更新逻辑 ---
+    function updateUI() {
+        document.getElementById('level').innerText = player.level;
+        document.getElementById('xp-text').innerText = player.xp;
+        document.getElementById('hp-text').innerText = player.hp;
+        
+        document.getElementById('xp-bar').style.width = (player.xp / player.xpNeeded * 100) + '%';
+        document.getElementById('hp-bar').style.width = (player.hp / player.maxHp * 100) + '%';
+        
+        // 技能树解锁逻辑
+        if(player.level >= 3) {
+            document.getElementById('skill-thermo').classList.add('unlocked');
+            document.getElementById('skill-thermo').innerHTML = "热力学<br>(已解锁)";
+        }
+        if(player.level >= 5) {
+            document.getElementById('skill-electro').classList.add('unlocked');
+            document.getElementById('skill-electro').innerHTML = "电动力学<br>(已解锁)";
+        }
+    }
+
+    // --- 经验与升级机制 ---
+    function gainXP(amount) {
+        player.xp += amount;
+        alert(`获得 ${amount} XP!`);
+        while (player.xp >= player.xpNeeded) {
+            player.xp -= player.xpNeeded;
+            player.level++;
+            player.xpNeeded = Math.floor(player.xpNeeded * 1.5);
+            player.maxHp += 20; // 升级提升生命上限
+            player.hp = player.maxHp; // 升级回满血
+            alert(`🎉 LEVEL UP! 你升到了 Lv.${player.level}！属性全面提升！`);
+        }
+        updateUI();
+    }
+
+    // --- 战斗系统 ---
+    function startBossFight() {
+        if(player.hp <= 0) {
+            alert("你已经没有精力了！请先休息（刷新页面）恢复 HP。");
+            return;
+        }
+        boss.hp = boss.maxHp;
+        currentQuestionIndex = 0;
+        document.getElementById('boss-modal').style.display = 'flex';
+        updateBossUI();
+        loadQuestion();
+    }
+
+    function updateBossUI() {
+        document.getElementById('boss-hp-text').innerText = boss.hp;
+        document.getElementById('boss-hp-bar').style.width = (boss.hp / boss.maxHp * 100) + '%';
+        updateUI(); // 同步更新玩家血条
+    }
+
+    function loadQuestion() {
+        if(currentQuestionIndex >= questions.length) {
+            alert("⚔️ BOSS 被击败！获得大量经验和史诗级成就感！");
+            gainXP(1500);
+            fleeBattle();
+            return;
+        }
+        let qData = questions[currentQuestionIndex];
+        document.getElementById('question-box').innerHTML = `<strong>物理攻击:</strong> ${qData.q}`;
+        
+        let optionsHtml = '';
+        qData.options.forEach((opt, index) => {
+            optionsHtml += `<button class="btn" onclick="attack(${index})">${opt}</button>`;
+        });
+        document.getElementById('options-box').innerHTML = optionsHtml;
+    }
+
+    function attack(selectedIndex) {
+        let qData = questions[currentQuestionIndex];
+        if(selectedIndex === qData.correctIndex) {
+            alert("✅ 回答正确！你的推导对 Boss 造成了暴击！");
+            boss.hp -= qData.damageToBoss;
+            currentQuestionIndex++;
+            if(boss.hp <= 0) {
+                updateBossUI();
+                setTimeout(loadQuestion, 500); // 触发胜利逻辑
+            } else {
+                loadQuestion();
+            }
+        } else {
+            alert("❌ 概念混淆！Boss 抓住了你的破绽，对你造成伤害！");
+            player.hp -= qData.damageToPlayer;
+            if(player.hp <= 0) {
+                player.hp = 0;
+                updateBossUI();
+                alert("💀 你的 HP 归零，挑战失败。需要重新审视物理概念...");
+                fleeBattle();
+            }
+        }
+        updateBossUI();
+    }
+
+    function fleeBattle() {
+        document.getElementById('boss-modal').style.display = 'none';
+        updateUI();
+    }
+
+    // 初始化 UI
+    updateUI();
+</script>
+</body>
+</html>
